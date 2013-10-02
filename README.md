@@ -4,6 +4,17 @@
 import "github/monsooncommerce/log"
 ```
 
+This package formats logs in the following format:
+
+```
+TIMESTAMP HOSTNAME TAG[PID]: LEVEL MESSAGE
+```
+
+Timestamp is RFC3339 formated. Hostname is the FQDN of the host writing the message.
+Tag represents the application name. PID is the Unix PID of the running application.
+Level is one of DEBUG, ERROR, INFO, NOTICE, or WARNING. All messages are written to
+stdout except ERROR messages, which are written to stderr.
+
 ## Usage
 
 ```Go
