@@ -1,7 +1,7 @@
 # Package log
 
 ```Go
-import "github/monsooncommerce/log"
+import "github.com/monsooncommerce/log"
 ```
 
 This package formats logs in the following format:
@@ -21,7 +21,7 @@ stdout except ERROR messages, which are written to stderr.
 package main
 
 import (
-    "github/monsooncommerce/log"
+    "github.com/monsooncommerce/log"
 )
 
 func main() {
