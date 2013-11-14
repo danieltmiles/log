@@ -37,15 +37,8 @@ func Warning(msg string) {
 }
 
 func write(level, msg string) {
-	var w *os.File
 	timestamp := time.Now().Format(time.RFC3339)
 	hostname, _ := os.Hostname()
-	switch level {
-	case "DEBUG", "INFO", "NOTICE", "WARNING":
-		w = os.Stdout
-	case "ERROR":
-		w = os.Stderr
-	}
-	fmt.Fprintf(w, "%s %s %s[%d]: %s %s\n",
+	fmt.Fprintf(os.Stderr, "%s %s %s[%d]: %s %s\n",
 		timestamp, hostname, tag, os.Getpid(), level, msg)
 }
