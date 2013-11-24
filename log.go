@@ -3,10 +3,14 @@ package log
 import (
 	"fmt"
 	"os"
+	"sync"
 	"time"
 )
 
-var tag string
+var (
+	tag string
+	mu  sync.Mutex
+)
 
 func init() {
 	tag = os.Args[0]
@@ -39,6 +43,9 @@ func Warning(msg string) {
 func write(level, msg string) {
 	timestamp := time.Now().Format(time.RFC3339)
 	hostname, _ := os.Hostname()
+	mu.Lock()
+	defer mu.Unlock()
+
 	fmt.Fprintf(os.Stderr, "%s %s %s[%d]: %s %s\n",
 		timestamp, hostname, tag, os.Getpid(), level, msg)
 }
