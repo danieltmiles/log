@@ -33,5 +33,5 @@ func main() {
 Output:
 
 ```
-2013-10-02T13:41:43-07:00 host.monsooncommerce.com myapp[25702]: ERROR This is an error message
+2013-10-02T13:41:43Z host.monsooncommerce.com myapp[25702]: ERROR This is an error message
 ```
