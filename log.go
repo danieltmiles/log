@@ -28,6 +28,11 @@ func Error(msg string) {
 	write("ERROR", msg)
 }
 
+func Fatal(msg string) {
+	write("FATAL", msg)
+	os.Exit(1)
+}
+
 func Info(msg string) {
 	write("INFO", msg)
 }
