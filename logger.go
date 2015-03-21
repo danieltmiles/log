@@ -7,12 +7,14 @@ import (
 )
 
 type Logger struct {
-	stompVersion   string
-	username       string
-	password       string
-	host           string
-	queueName      string
-	outFile        *os.File
+	stompVersion string
+	username     string
+	password     string
+	host         string
+	queueName    string
+
+	outFile *os.File
+
 	fileChan       chan string
 	netChan        chan string
 	connectionChan chan stompConnectioner
@@ -33,10 +35,15 @@ func NewLogger(host, username, password, filePath, queueName string, port, buffe
 		l.outFile = logfile
 	}
 
+	l.host = host
+	l.password = password
 	l.queueName = queueName
+	l.stompVersion = "1.1"
+	l.username = username
+
+	l.connectionChan = make(chan stompConnectioner, numConnections)
 	l.fileChan = make(chan string, bufferDepth)
 	l.netChan = make(chan string, bufferDepth)
-	l.connectionChan = make(chan stompConnectioner, numConnections)
 
 	for i := 0; i < numNetWorkers; i++ {
 		go l.netWorker()
@@ -106,7 +113,15 @@ func (l *Logger) Warning(msg string) {
 func (l *Logger) publish(logLevel, msg string) {
 	//formattedMsg := format(logLevel, msg)
 	timestamp := time.Now().Format(time.RFC3339)
-	formattedMsg := fmt.Sprintf("%s %s %s[%d]: %s %s\n", timestamp, hostname, tag, os.Getpid(), logLevel, msg)
+	formattedMsg := fmt.Sprintf(
+		"%s %s %s[%d]: %s %s\n",
+		timestamp,
+		hostname,
+		tag,
+		os.Getpid(),
+		logLevel,
+		msg,
+	)
 	select {
 	case l.fileChan <- formattedMsg:
 	default:
