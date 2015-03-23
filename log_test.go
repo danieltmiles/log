@@ -29,12 +29,15 @@ func TestLogger(t *testing.T) {
 
 		g.BeforeEach(func() {
 			stompConnection = mockstomp.MockStompConnection{}
-			err := os.Remove("logFile.log")
-			if err != nil {
-				fmt.Printf("couldn't delete file: %v\n", err.Error())
+			if _, err := os.Stat(filePath); err == nil {
+				err := os.Remove(filePath)
+				if err != nil {
+					fmt.Printf("couldn't delete file: %v\n", err.Error())
+				}
 			}
+
 			InitializeQueueConnection = func(host, username, password string, port int) (stompConnectioner, error) {
-				stompConnection.Init()
+				stompConnection.Clear()
 
 				return &stompConnection, nil
 			}
@@ -64,8 +67,8 @@ func TestLogger(t *testing.T) {
 		g.It("should send messages to mock queue", func() {
 
 			testLogger := NewLogger(
-				"user", "pass", "myQueue", "queuehost.com",
-				"logFile.log", 1000, 38000000, 1,
+				"queuehost.com", "user", "pass", "logFile.log",
+				"myQueue", 1000, 38000000, 1,
 			)
 
 			logLine := "Can't connect to server."
@@ -73,7 +76,7 @@ func TestLogger(t *testing.T) {
 
 			expectedMessage := mockstomp.MockStompMessage{
 				Order:   0,
-				Headers: []string{"persistent", "true", "destination", "/queue/logFile.log"},
+				Headers: []string{"persistent", "true", "destination", "/queue/myQueue"},
 				Message: fmt.Sprintf(
 					"%v queuehost.com [%v]: DEBUG Can't connect to server.\n",
 					time.Now().Format("2006-01-02T15:04:05-07:00"),
@@ -81,8 +84,7 @@ func TestLogger(t *testing.T) {
 				),
 			}
 
-			time.Sleep(1 * time.Second)
-			//stompConnection := <-testLogger.connectionChan
+			time.Sleep(1 * time.Millisecond)
 
 			Expect(len(stompConnection.MessagesSent)).To(Equal(1))
 			msg := <-stompConnection.MessagesSent
