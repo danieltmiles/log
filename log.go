@@ -75,7 +75,7 @@ func (log *Logger) Fatal(msg string) {
 }
 
 func (log *Logger) write(level Level, msg string) {
-	if level < log.threshold {
+	if level > log.threshold {
 		return
 	}
 
