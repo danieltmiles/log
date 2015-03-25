@@ -14,7 +14,7 @@ func TestLogging(t *testing.T) {
 
 	g.Describe("Logging", func() {
 		var m *mockwriter.MockWriter
-		var logger *Logger
+		var logger *Log
 
 		g.BeforeEach(func() {
 			m = &mockwriter.MockWriter{}

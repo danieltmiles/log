@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-type Logger struct {
+type Log struct {
 	mu        sync.Mutex
 	tag       string
 	threshold Level
@@ -38,43 +38,43 @@ var (
 	}
 )
 
-func New(writer io.Writer, threshold Level) *Logger {
-	return &Logger{
+func New(writer io.Writer, threshold Level) *Log {
+	return &Log{
 		writer:    writer,
 		threshold: threshold,
 	}
 }
 
-func (log *Logger) SetTag(t string) {
+func (log *Log) SetTag(t string) {
 	log.tag = t
 }
 
-func (log *Logger) Debug(msg string) {
+func (log *Log) Debug(msg string) {
 	log.write(Debug, msg)
 }
 
-func (log *Logger) Info(msg string) {
+func (log *Log) Info(msg string) {
 	log.write(Info, msg)
 }
 
-func (log *Logger) Notice(msg string) {
+func (log *Log) Notice(msg string) {
 	log.write(Notice, msg)
 }
 
-func (log *Logger) Warning(msg string) {
+func (log *Log) Warning(msg string) {
 	log.write(Warning, msg)
 }
 
-func (log *Logger) Error(msg string) {
+func (log *Log) Error(msg string) {
 	log.write(Error, msg)
 }
 
-func (log *Logger) Fatal(msg string) {
+func (log *Log) Fatal(msg string) {
 	log.write(Fatal, msg)
 	os.Exit(1)
 }
 
-func (log *Logger) write(level Level, msg string) {
+func (log *Log) write(level Level, msg string) {
 	if level > log.threshold {
 		return
 	}
