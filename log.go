@@ -2,55 +2,100 @@ package log
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"sync"
 	"time"
 )
 
+type Log struct {
+	mu        sync.Mutex
+	tag       string
+	threshold Level
+	writer    io.Writer
+}
+
+type Level int8
+
+const (
+	None Level = iota - 1
+	Fatal
+	Error
+	Warning
+	Notice
+	Info
+	Debug
+)
+
 var (
-	tag string
-	mu  sync.Mutex
+	hostname     string
+	tag          string
+	levelStrings = []string{
+		"FATAL",
+		"ERROR",
+		"WARNING",
+		"NOTICE",
+		"INFO",
+		"DEBUG",
+	}
 )
 
 func init() {
+	hostname, _ = os.Hostname()
 	tag = os.Args[0]
 }
 
-func SetTag(t string) {
-	tag = t
+func New(writer io.Writer, threshold Level) *Log {
+	return &Log{
+		tag:       tag,
+		threshold: threshold,
+		writer:    writer,
+	}
 }
 
-func Debug(msg string) {
-	write("DEBUG", msg)
+func (log *Log) SetTag(t string) {
+	log.tag = t
 }
 
-func Error(msg string) {
-	write("ERROR", msg)
+func (log *Log) Debug(msg string) {
+	log.write(Debug, msg)
 }
 
-func Fatal(msg string) {
-	write("FATAL", msg)
+func (log *Log) Info(msg string) {
+	log.write(Info, msg)
+}
+
+func (log *Log) Notice(msg string) {
+	log.write(Notice, msg)
+}
+
+func (log *Log) Warning(msg string) {
+	log.write(Warning, msg)
+}
+
+func (log *Log) Error(msg string) {
+	log.write(Error, msg)
+}
+
+func (log *Log) Fatal(msg string) {
+	log.write(Fatal, msg)
 	os.Exit(1)
 }
 
-func Info(msg string) {
-	write("INFO", msg)
-}
+func (log *Log) write(level Level, msg string) {
+	if level > log.threshold {
+		return
+	}
 
-func Notice(msg string) {
-	write("NOTICE", msg)
-}
-
-func Warning(msg string) {
-	write("WARNING", msg)
-}
-
-func write(level, msg string) {
 	timestamp := time.Now().Format(time.RFC3339)
-	hostname, _ := os.Hostname()
-	mu.Lock()
-	defer mu.Unlock()
 
-	fmt.Fprintf(os.Stderr, "%s %s %s[%d]: %s %s\n",
-		timestamp, hostname, tag, os.Getpid(), level, msg)
+	log.mu.Lock()
+	defer log.mu.Unlock()
+
+	fmt.Fprintf(log.writer, "%s %s %s[%d]: %s %s\n",
+		timestamp, hostname, log.tag, os.Getpid(), level, msg)
+}
+
+func (level Level) String() string {
+	return levelStrings[level]
 }
