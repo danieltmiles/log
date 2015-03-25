@@ -117,7 +117,7 @@ func (log *Log) write(level Level, args ...interface{}) {
 	log.mu.Lock()
 	defer log.mu.Unlock()
 
-	fmt.Fprintf(log.writer, "%s %s %s[%d]: %s %s\n",
+	fmt.Fprintf(log.writer, "%s %s %s[%d]: %s %v\n",
 		timestamp, hostname, log.tag, os.Getpid(), level, args)
 }
 
