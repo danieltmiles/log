@@ -61,32 +61,49 @@ func (log *Log) Debug(args ...interface{}) {
 	log.write(Debug, args)
 }
 
-func (log *Log) Info(msg string) {
-	log.write(Info, msg)
+func (log *Log) Debugf(format string, args ...interface{}) {
+	log.write(Debug, fmt.Sprintf(format, args))
 }
 
 func (log *Log) Info(args ...interface{}) {
 	log.write(Info, args)
 }
 
-func (log *Log) Warning(msg string) {
-	log.write(Warning, msg)
+func (log *Log) Infof(format string, args ...interface{}) {
+	log.write(Info, fmt.Sprintf(format, args))
 }
 
 func (log *Log) Notice(args ...interface{}) {
 	log.write(Notice, args)
 }
 
+func (log *Log) Noticef(format string, args ...interface{}) {
+	log.write(Notice, fmt.Sprintf(format, args))
+}
+
 func (log *Log) Warning(args ...interface{}) {
 	log.write(Warning, args)
+}
+
+func (log *Log) Warningf(format string, args ...interface{}) {
+	log.write(Warning, fmt.Sprintf(format, args))
 }
 
 func (log *Log) Error(args ...interface{}) {
 	log.write(Error, args)
 }
 
+func (log *Log) Errorf(format string, args ...interface{}) {
+	log.write(Error, fmt.Sprintf(format, args))
+}
+
 func (log *Log) Fatal(args ...interface{}) {
 	log.write(Fatal, args)
+	os.Exit(1)
+}
+
+func (log *Log) Fatalf(format string, args ...interface{}) {
+	log.write(Fatal, fmt.Sprintf(format, args))
 	os.Exit(1)
 }
 
