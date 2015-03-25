@@ -28,6 +28,8 @@ const (
 )
 
 var (
+	hostname     string
+	tag          string
 	levelStrings = []string{
 		"FATAL",
 		"ERROR",
@@ -38,10 +40,16 @@ var (
 	}
 )
 
+func init() {
+	hostname, _ = os.Hostname()
+	tag = os.Args[0]
+}
+
 func New(writer io.Writer, threshold Level) *Log {
 	return &Log{
-		writer:    writer,
+		tag:       tag,
 		threshold: threshold,
+		writer:    writer,
 	}
 }
 
@@ -80,7 +88,6 @@ func (log *Log) write(level Level, msg string) {
 	}
 
 	timestamp := time.Now().Format(time.RFC3339)
-	hostname, _ := os.Hostname()
 
 	log.mu.Lock()
 	defer log.mu.Unlock()
