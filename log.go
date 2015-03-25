@@ -57,32 +57,40 @@ func (log *Log) SetTag(t string) {
 	log.tag = t
 }
 
-func (log *Log) Debug(msg string) {
-	log.write(Debug, msg)
+func (log *Log) Debug(args ...interface{}) {
+	log.write(Debug, args)
 }
 
 func (log *Log) Info(msg string) {
 	log.write(Info, msg)
 }
 
-func (log *Log) Notice(msg string) {
-	log.write(Notice, msg)
+func (log *Log) Info(args ...interface{}) {
+	log.write(Info, args)
 }
 
 func (log *Log) Warning(msg string) {
 	log.write(Warning, msg)
 }
 
-func (log *Log) Error(msg string) {
-	log.write(Error, msg)
+func (log *Log) Notice(args ...interface{}) {
+	log.write(Notice, args)
 }
 
-func (log *Log) Fatal(msg string) {
-	log.write(Fatal, msg)
+func (log *Log) Warning(args ...interface{}) {
+	log.write(Warning, args)
+}
+
+func (log *Log) Error(args ...interface{}) {
+	log.write(Error, args)
+}
+
+func (log *Log) Fatal(args ...interface{}) {
+	log.write(Fatal, args)
 	os.Exit(1)
 }
 
-func (log *Log) write(level Level, msg string) {
+func (log *Log) write(level Level, args ...interface{}) {
 	if level > log.threshold {
 		return
 	}
@@ -93,7 +101,7 @@ func (log *Log) write(level Level, msg string) {
 	defer log.mu.Unlock()
 
 	fmt.Fprintf(log.writer, "%s %s %s[%d]: %s %s\n",
-		timestamp, hostname, log.tag, os.Getpid(), level, msg)
+		timestamp, hostname, log.tag, os.Getpid(), level, args)
 }
 
 func (level Level) String() string {
