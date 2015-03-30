@@ -6,11 +6,11 @@ This package does not currently allow for custom formats.  Logs will be written 
 ```
 TIMESTAMP HOSTNAME TAG[PID]: LEVEL MESSAGE
 ```
-* ''Timestamp'' - RFC3339 formated
-* ''Hostname'' - the FQDN of the host writing the message
-* ''Tag'' - represents the application name
-* ''PID'' - the Unix PID of the running application
-* ''Level'' - one of DEBUG, ERROR, INFO, NOTICE, WARNING, or FATAL
+* **Timestamp** - RFC3339 formated
+* **Hostname** - the FQDN of the host writing the message
+* **Tag** - represents the application name
+* **PID** - the Unix PID of the running application
+* **Level** - one of DEBUG, ERROR, INFO, NOTICE, WARNING, or FATAL
 
 # Usage
 
