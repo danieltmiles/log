@@ -22,6 +22,7 @@ func TestFormatter(t *testing.T) {
 
 			f := &DefaultFormat{
 				hostname: h,
+				pid:      p,
 				tag:      t,
 			}
 

@@ -42,6 +42,7 @@ func New(writer io.Writer, threshold Level) *Log {
 	return &Log{
 		Formatter: &DefaultFormat{
 			hostname: hostname,
+			pid:      os.Getpid(),
 			tag:      os.Args[0],
 		},
 		threshold: threshold,
