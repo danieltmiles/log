@@ -5,17 +5,16 @@ import (
 	"io"
 	"os"
 	"sync"
-	"time"
 )
 
+type Level int8
+
 type Log struct {
+	Formatter
 	mu        sync.Mutex
-	tag       string
 	threshold Level
 	writer    io.Writer
 }
-
-type Level int8
 
 const (
 	None Level = iota - 1
@@ -28,8 +27,6 @@ const (
 )
 
 var (
-	hostname     string
-	tag          string
 	levelStrings = []string{
 		"FATAL",
 		"ERROR",
@@ -40,21 +37,16 @@ var (
 	}
 )
 
-func init() {
-	hostname, _ = os.Hostname()
-	tag = os.Args[0]
-}
-
 func New(writer io.Writer, threshold Level) *Log {
+	hostname, _ := os.Hostname()
 	return &Log{
-		tag:       tag,
+		Formatter: &DefaultFormat{
+			hostname: hostname,
+			tag:      os.Args[0],
+		},
 		threshold: threshold,
 		writer:    writer,
 	}
-}
-
-func (log *Log) SetTag(t string) {
-	log.tag = t
 }
 
 func (log *Log) Debug(args ...interface{}) {
@@ -107,18 +99,19 @@ func (log *Log) Fatalf(format string, args ...interface{}) {
 	os.Exit(1)
 }
 
+func (log *Log) SetFormatter(f Formatter) {
+	log.Formatter = f
+}
+
 func (log *Log) write(level Level, args ...interface{}) {
 	if level > log.threshold {
 		return
 	}
 
-	timestamp := time.Now().Format(time.RFC3339)
-
 	log.mu.Lock()
 	defer log.mu.Unlock()
 
-	fmt.Fprintf(log.writer, "%s %s %s[%d]: %s %v\n",
-		timestamp, hostname, log.tag, os.Getpid(), level, args)
+	fmt.Fprint(log.writer, log.Format(level, args))
 }
 
 func (level Level) String() string {
