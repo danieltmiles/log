@@ -21,3 +21,7 @@ func (f *DefaultFormat) Format(level Level, args ...interface{}) string {
 	return fmt.Sprintf("%s %s %s[%d]: %s %v\n",
 		timestamp, f.hostname, f.tag, f.pid, level, args)
 }
+
+func (f *DefaultFormat) SetTag(t string) {
+	f.tag = t
+}
