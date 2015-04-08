@@ -7,6 +7,7 @@ import (
 
 type Formatter interface {
 	Format(Level, ...interface{}) string
+	SetTag(string)
 }
 
 type DefaultFormat struct {
