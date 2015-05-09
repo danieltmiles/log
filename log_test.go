@@ -30,56 +30,56 @@ func TestLogging(t *testing.T) {
 
 		g.It("should write a debug message", func() {
 			logger.Debug("debug message")
-			Expect(m.Written).To(ContainSubstring("DEBUG [[[debug message]]]"))
+			Expect(m.Written).To(ContainSubstring("DEBUG [debug message"))
 		})
 
 		g.It("should write a formatted debug message", func() {
 			logger.Debugf("additional: %s", "debug message")
-			Expect(m.Written).To(ContainSubstring("additional: [debug message]"))
+			Expect(m.Written).To(ContainSubstring("additional: debug message"))
 			Expect(m.Written).To(ContainSubstring("DEBUG"))
 		})
 
 		g.It("should write an info message", func() {
 			logger.Info("info message")
-			Expect(m.Written).To(ContainSubstring("INFO [[[info message]]]"))
+			Expect(m.Written).To(ContainSubstring("INFO [info message"))
 		})
 
 		g.It("should write a formatted info message", func() {
 			logger.Infof("additional: %s", "info message")
-			Expect(m.Written).To(ContainSubstring("additional: [info message]"))
+			Expect(m.Written).To(ContainSubstring("additional: info message"))
 			Expect(m.Written).To(ContainSubstring("INFO"))
 		})
 
 		g.It("should write a notice message", func() {
 			logger.Notice("notice message")
-			Expect(m.Written).To(ContainSubstring("NOTICE [[[notice message]]]"))
+			Expect(m.Written).To(ContainSubstring("NOTICE [notice message"))
 		})
 
 		g.It("should write a formatted notice message", func() {
 			logger.Noticef("additional: %s", "notice message")
-			Expect(m.Written).To(ContainSubstring("additional: [notice message]"))
+			Expect(m.Written).To(ContainSubstring("additional: notice message"))
 			Expect(m.Written).To(ContainSubstring("NOTICE"))
 		})
 
 		g.It("should write a warning message", func() {
 			logger.Warning("warning message")
-			Expect(m.Written).To(ContainSubstring("WARNING [[[warning message]]]"))
+			Expect(m.Written).To(ContainSubstring("WARNING [warning message"))
 		})
 
 		g.It("should write a formatted warning message", func() {
 			logger.Warningf("additional: %s", "warning message")
-			Expect(m.Written).To(ContainSubstring("additional: [warning message]"))
+			Expect(m.Written).To(ContainSubstring("additional: warning message"))
 			Expect(m.Written).To(ContainSubstring("WARNING"))
 		})
 
 		g.It("should write a error message", func() {
 			logger.Error("error message")
-			Expect(m.Written).To(ContainSubstring("ERROR [[[error message]]]"))
+			Expect(m.Written).To(ContainSubstring("ERROR [error message"))
 		})
 
 		g.It("should write a formatted error message", func() {
 			logger.Errorf("additional: %s", "error message")
-			Expect(m.Written).To(ContainSubstring("additional: [error message]"))
+			Expect(m.Written).To(ContainSubstring("additional: error message"))
 			Expect(m.Written).To(ContainSubstring("ERROR"))
 		})
 	})
@@ -205,11 +205,11 @@ func TestLogging(t *testing.T) {
 
 			logger.Debug("test message")
 			Expect(f.Formatted).To(Equal(1))
-			Expect(m.Written).To(ContainSubstring("Custom: [DEBUG] -- [[[test message]]]"))
+			Expect(string(m.Written)).To(ContainSubstring("Custom: [DEBUG] -- [test message]"))
 
 			logger.Error("test message")
 			Expect(f.Formatted).To(Equal(2))
-			Expect(m.Written).To(ContainSubstring("Custom: [ERROR] -- [[[test message]]]"))
+			Expect(string(m.Written)).To(ContainSubstring("Custom: [ERROR] -- [test message]"))
 		})
 	})
 }
