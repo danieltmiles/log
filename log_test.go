@@ -233,13 +233,18 @@ func TestLogging(t *testing.T) {
 		})
 	})
 
-	g.Describe("Initialization", func() {
-		g.It("should be properly initialized with Configure", func() {
-			m := &mockwriter.MockWriter{}
-			configuredLogger := Configure("DEBUG", "appname", m)
-			Expect(configuredLogger.threshold).To(Equal(Debug))
-			configuredLogger = Configure("Fatal", "nameOfApp", m)
-			Expect(configuredLogger.threshold).To(Equal(Fatal))
+	g.Describe("getLogLevel", func() {
+		g.It("should get supported log levels from string", func() {
+			Expect(GetLogLevel("debug")).To(Equal(Debug)) // lowercase
+			Expect(GetLogLevel("Debug")).To(Equal(Debug)) // camelcase
+			Expect(GetLogLevel("deBUG")).To(Equal(Debug)) // bad case
+			Expect(GetLogLevel("info")).To(Equal(Info))   // non info case
+			level, err := GetLogLevel("")
+			Expect(level).To(Equal(Debug)) // empty string default case
+			Expect(err).To(Equal(EmptyLogLevelError))
+			level, err = GetLogLevel("nonExistantLevel")
+			Expect(level).To(Equal(Debug)) // nonexistant log level case
+			Expect(err).To(Equal(NonSupportedLevelError))
 		})
 	})
 }
