@@ -232,6 +232,16 @@ func TestLogging(t *testing.T) {
 			Expect(string(m.Written)).To(ContainSubstring("Custom: [ERROR] -- [test message]"))
 		})
 	})
+
+	g.Describe("Initialization", func() {
+		g.It("should be properly initialized with Configure", func() {
+			m := &mockwriter.MockWriter{}
+			configuredLogger := Configure("DEBUG", "appname", m)
+			Expect(configuredLogger.threshold).To(Equal(Debug))
+			configuredLogger = Configure("Fatal", "nameOfApp", m)
+			Expect(configuredLogger.threshold).To(Equal(Fatal))
+		})
+	})
 }
 
 type CustomFormat struct {

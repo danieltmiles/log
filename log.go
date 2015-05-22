@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 	"sync"
 )
 
@@ -117,4 +118,27 @@ func (log *Log) write(level Level, args ...interface{}) {
 
 func (level Level) String() string {
 	return levelStrings[level]
+}
+
+func Configure(logLevel, appName string, writer io.Writer) *Log {
+	// Log levels
+	logLevelFinal := Debug
+	switch strings.ToLower(logLevel) {
+	case "fatal":
+		logLevelFinal = Fatal
+	case "error":
+		logLevelFinal = Error
+	case "warning":
+		logLevelFinal = Warning
+	case "notice":
+		logLevelFinal = Notice
+	case "info":
+		logLevelFinal = Info
+	case "debug":
+	default:
+		fmt.Printf("%s_LOGLEVEL not specified, defaulting to DEBUG\n", strings.ToUpper(appName))
+	}
+
+	logger := New(writer, logLevelFinal)
+	return logger
 }
