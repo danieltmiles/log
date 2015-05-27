@@ -1,7 +1,6 @@
 package log
 
 import (
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -37,8 +36,6 @@ var (
 		"INFO",
 		"DEBUG",
 	}
-	NonSupportedLevelError = errors.New("non supported log level")
-	EmptyLogLevelError     = errors.New("empty value for log level")
 )
 
 func New(writer io.Writer, threshold Level) *Log {
@@ -123,24 +120,19 @@ func (level Level) String() string {
 	return levelStrings[level]
 }
 
-func GetLogLevel(levelInput string) (Level, error) {
-	levelOutput := Debug
+func GetLogLevel(levelInput string) Level {
 	switch strings.ToLower(levelInput) {
 	case "fatal":
-		levelOutput = Fatal
+		return Fatal
 	case "error":
-		levelOutput = Error
+		return Error
 	case "warning":
-		levelOutput = Warning
+		return Warning
 	case "notice":
-		levelOutput = Notice
+		return Notice
 	case "info":
-		levelOutput = Info
-	case "debug":
-	case "":
-		return Debug, EmptyLogLevelError
+		return Info
 	default:
-		return Debug, NonSupportedLevelError
+		return Debug
 	}
-	return levelOutput, nil
 }

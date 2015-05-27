@@ -239,12 +239,10 @@ func TestLogging(t *testing.T) {
 			Expect(GetLogLevel("Debug")).To(Equal(Debug)) // camelcase
 			Expect(GetLogLevel("deBUG")).To(Equal(Debug)) // bad case
 			Expect(GetLogLevel("info")).To(Equal(Info))   // non info case
-			level, err := GetLogLevel("")
+			level := GetLogLevel("")
 			Expect(level).To(Equal(Debug)) // empty string default case
-			Expect(err).To(Equal(EmptyLogLevelError))
-			level, err = GetLogLevel("nonExistantLevel")
+			level = GetLogLevel("nonExistantLevel")
 			Expect(level).To(Equal(Debug)) // nonexistant log level case
-			Expect(err).To(Equal(NonSupportedLevelError))
 		})
 	})
 }
