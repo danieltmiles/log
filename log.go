@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 	"sync"
 )
 
@@ -117,4 +118,21 @@ func (log *Log) write(level Level, args ...interface{}) {
 
 func (level Level) String() string {
 	return levelStrings[level]
+}
+
+func GetLogLevel(levelInput string) Level {
+	switch strings.ToLower(levelInput) {
+	case "fatal":
+		return Fatal
+	case "error":
+		return Error
+	case "warning":
+		return Warning
+	case "notice":
+		return Notice
+	case "info":
+		return Info
+	default:
+		return Debug
+	}
 }

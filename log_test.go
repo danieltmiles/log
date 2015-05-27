@@ -232,6 +232,19 @@ func TestLogging(t *testing.T) {
 			Expect(string(m.Written)).To(ContainSubstring("Custom: [ERROR] -- [test message]"))
 		})
 	})
+
+	g.Describe("getLogLevel", func() {
+		g.It("should get supported log levels from string", func() {
+			Expect(GetLogLevel("debug")).To(Equal(Debug)) // lowercase
+			Expect(GetLogLevel("Debug")).To(Equal(Debug)) // camelcase
+			Expect(GetLogLevel("deBUG")).To(Equal(Debug)) // bad case
+			Expect(GetLogLevel("info")).To(Equal(Info))   // non info case
+			level := GetLogLevel("")
+			Expect(level).To(Equal(Debug)) // empty string default case
+			level = GetLogLevel("nonExistantLevel")
+			Expect(level).To(Equal(Debug)) // nonexistant log level case
+		})
+	})
 }
 
 type CustomFormat struct {
