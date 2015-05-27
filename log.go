@@ -144,11 +144,3 @@ func GetLogLevel(levelInput string) (Level, error) {
 	}
 	return levelOutput, nil
 }
-
-func Configure(logLevel, appName string, writer io.Writer) *Log {
-	// Log levels
-	logLevelFinal := Debug
-
-	logger := New(writer, logLevelFinal)
-	return logger
-}
