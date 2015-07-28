@@ -3,6 +3,7 @@ package log
 import (
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 	"strings"
 	"sync"
@@ -15,6 +16,20 @@ type Log struct {
 	mu        sync.Mutex
 	threshold Level
 	writer    io.Writer
+}
+
+type LogHandler interface {
+	Handle(http.ResponseWriter, error, int)
+}
+
+type LogHandlerImpl struct {
+	Logger *Log
+}
+
+func (l *LogHandlerImpl) Handle(w http.ResponseWriter, err error, code int) {
+	l.Logger.Error(err.Error())
+	w.Write([]byte(err.Error()))
+	w.WriteHeader(code)
 }
 
 const (
