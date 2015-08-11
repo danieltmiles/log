@@ -251,6 +251,8 @@ func TestLogging(t *testing.T) {
 			m := &mockwriter.MockWriter{}
 			logger := New(m, Debug)
 			Expect(logger.getThreshold()).To(Equal(Debug))
+			logger = New(m, Info)
+			Expect(logger.getThreshold()).To(Equal(Info))
 		})
 	})
 }
