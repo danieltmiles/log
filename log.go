@@ -137,6 +137,6 @@ func GetLogLevel(levelInput string) Level {
 	}
 }
 
-func (log *Log) getThreshold() Level{
+func (log *Log) Threshold() Level{
 	return log.threshold
 }

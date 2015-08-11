@@ -246,13 +246,13 @@ func TestLogging(t *testing.T) {
 		})
 	})
 
-	g.Describe("getThreshold", func() {
+	g.Describe("Threshold", func() {
 		g.It("should correctly return the threshold of the current logger", func(){
 			m := &mockwriter.MockWriter{}
 			logger := New(m, Debug)
-			Expect(logger.getThreshold()).To(Equal(Debug))
+			Expect(logger.Threshold()).To(Equal(Debug))
 			logger = New(m, Info)
-			Expect(logger.getThreshold()).To(Equal(Info))
+			Expect(logger.Threshold()).To(Equal(Info))
 		})
 	})
 }
