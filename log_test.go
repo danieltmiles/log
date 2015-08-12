@@ -245,6 +245,16 @@ func TestLogging(t *testing.T) {
 			Expect(level).To(Equal(Debug)) // nonexistant log level case
 		})
 	})
+
+	g.Describe("Threshold", func() {
+		g.It("should correctly return the threshold of the current logger", func(){
+			m := &mockwriter.MockWriter{}
+			logger := New(m, Debug)
+			Expect(logger.Threshold()).To(Equal(Debug))
+			logger = New(m, Info)
+			Expect(logger.Threshold()).To(Equal(Info))
+		})
+	})
 }
 
 type CustomFormat struct {
