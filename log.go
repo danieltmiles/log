@@ -28,8 +28,8 @@ type LogHandlerImpl struct {
 
 func (l *LogHandlerImpl) Handle(w http.ResponseWriter, err error, code int) {
 	l.Logger.Error(err.Error())
-	w.Write([]byte(err.Error()))
 	w.WriteHeader(code)
+	w.Write([]byte(err.Error()))
 }
 
 const (
@@ -152,6 +152,6 @@ func GetLogLevel(levelInput string) Level {
 	}
 }
 
-func (log *Log) Threshold() Level{
+func (log *Log) Threshold() Level {
 	return log.threshold
 }
