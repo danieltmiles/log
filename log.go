@@ -116,6 +116,8 @@ func (log *Log) Fatal(args ...interface{}) {
 
 func (log *Log) Fatalf(format string, args ...interface{}) {
 	log.write(Fatal, fmt.Sprintf(format, args...))
+	// give any downstream writers a little time to clear before exiting
+	<-time.After(10 * time.Millisecond)
 	os.Exit(1)
 }
 
