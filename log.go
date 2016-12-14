@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 	"sync"
+	"time"
 )
 
 type Level int8
@@ -108,6 +109,8 @@ func (log *Log) Errorf(format string, args ...interface{}) {
 
 func (log *Log) Fatal(args ...interface{}) {
 	log.write(Fatal, args...)
+	// give any downstream writers a little time to clear before exiting
+	<-time.After(10 * time.Millisecond)
 	os.Exit(1)
 }
 
